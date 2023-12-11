@@ -1,21 +1,11 @@
-export enum HTTP {
-  OK = 200,
-  CREATED = 201,
-  BAD_REQUEST = 404,
-}
-
-interface iError {
-  name: string;
-  message: string;
-  status: HTTP;
-  success: boolean;
-}
+import { HTTP } from "../utils/enum";
+import { iError } from "../utils/interfaces";
 
 export class mainError extends Error {
   public readonly name: string;
   public readonly message: string;
-  public readonly success: boolean;
   public readonly status: HTTP;
+  public readonly success: boolean = false;
 
   constructor(args: iError) {
     super(args.message);

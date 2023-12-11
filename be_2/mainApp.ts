@@ -1,4 +1,7 @@
-import { Application, Request, Response } from "express";
+import { Application, NextFunction, Request, Response } from "express";
+import { mainError } from "./error/mainError";
+import { handlError } from "./error/handleError";
+import { HTTP } from "./utils/enum";
 
 export const mainApp = (app: Application) => {
   try {
@@ -13,6 +16,19 @@ export const mainApp = (app: Application) => {
         });
       }
     });
+
+    app.all("*", (req: Request, res: Response, next: NextFunction) => {
+      next(
+        new mainError({
+          name: "Router Error",
+          message: `This endpoint ${req.originalUrl} does'nt exist`,
+          status: HTTP.BAD_REQUEST,
+          success: false,
+        })
+      );
+    });
+
+    app.use(handlError);
   } catch (error) {
     return error;
   }
